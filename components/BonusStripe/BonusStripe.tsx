@@ -38,7 +38,7 @@ const BonusStripe: FunctionComponent<Props> = ({
 
     // Router.push(`/visita/${bonus.compareCode}/${countryCode}`)
     window.open(
-      `https://casinosquad.toply.info/visita/${bonus.compareCode}/${countryCode}`
+      `https://casinosquadtw.toply.info/visita/${bonus.compareCode}/${countryCode}`
     );
   };
 
