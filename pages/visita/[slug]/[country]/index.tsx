@@ -1,11 +1,11 @@
-import React from 'react'
-import Head from 'next/head'
-import { FunctionComponent } from 'react';
-import AquaClient from '../../../../graphql/aquaClient';
-import { configuration } from '../../../../configuration';
+import React from "react";
+import Head from "next/head";
+import { FunctionComponent } from "react";
+import AquaClient from "../../../../graphql/aquaClient";
+import { configuration } from "../../../../configuration";
 
 interface Props {
-    redirect: string
+  redirect: string;
 }
 
 export const GET_BONUS_BY_SLUG = `
@@ -32,19 +32,18 @@ export const GET_BONUS_BY_SLUG = `
         }
         }   
     }
-`
+`;
 
 const index: FunctionComponent<Props> = ({ redirect }) => {
-
-    console.log('redirecting to unibt')
-    return (
-        <div>
-            <Head>
-                <meta httpEquiv='refresh' content={`0.1;url=${redirect}`}></meta>
-            </Head>
-        </div>
-    )
-}
+  console.log("redirecting to unibt");
+  return (
+    <div>
+      <Head>
+        <meta httpEquiv="refresh" content={`0.1;url=${redirect}`}></meta>
+      </Head>
+    </div>
+  );
+};
 
 // unibet https://dspk.kindredplc.com/redirect.aspx?pid=5615153&bid=27508
 
@@ -61,38 +60,38 @@ query($compareCode:String="hello", $id : ID=1){
       }
     }
   }
-`
+`;
 
 export async function getServerSideProps({ query, res }) {
+  const slug = query.slug as string;
+  const country = query.country as string;
 
+  let redirect;
 
-    const slug = query.slug as string
-    const country = query.country as string
+  const aquaClient = new AquaClient();
 
-    let redirect
+  console.log(`${slug} ${configuration.streamerName} it`);
 
-    const aquaClient = new AquaClient()
+  const links = await aquaClient.query({
+    query: bonusQuery,
+    variables: {
+      compareCode: slug,
+      id: configuration.streamerId,
+      label: `${slug} ${configuration.streamerName} it`,
+    },
+  });
 
-    console.log(`${slug} ${configuration.streamerName} it`)
+  console.log(links.data.data.streamer.bonuses[0].links.map((b) => b.label));
 
-    const links = await aquaClient.query({
-        query : bonusQuery,
-        variables : {
-            compareCode : slug,
-            id : configuration.streamerId,
-            label : `${slug} ${configuration.streamerName} it`
-        }
-    })
+  const link = links.data.data.streamer.bonuses[0].links.find(
+    (b) => b.label === `${slug} ${configuration.streamerName} ${country}`
+  );
 
-    const link = links.data.data.streamer.bonuses[0].links.find(b => b.label === `${slug} ${configuration.streamerName} ${country}`)
-
-    
-    
-    return {
-        props: {
-            redirect : link.link
-        }
-    }
+  return {
+    props: {
+      redirect: link.link,
+    },
+  };
 }
 
-export default index
+export default index;

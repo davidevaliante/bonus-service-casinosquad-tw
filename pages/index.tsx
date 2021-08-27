@@ -85,7 +85,7 @@ const index: FunctionComponent<Props> = ({ streamerData }) => {
       }
     });
 
-    setBonuses([...ordered, ...unorderedBonuses]);
+    setBonuses([...ordered]);
     setLoading(false);
   };
 
