@@ -113,7 +113,7 @@ const index: FunctionComponent<Props> = ({ streamerData }) => {
 
 				<h1>
 					{country === 'it'
-						? 'Migliori casinò legali dove trovare questi giochi:'
+						? 'Comparazione offerte di siti legali in Italia'
 						: 'Best Casino to play this games'}
 				</h1>
 
